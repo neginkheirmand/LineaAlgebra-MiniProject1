@@ -30,6 +30,27 @@ def getRowAndColumnInfo():
     return listOfInput[0], listOfInput[1]
     
 
+#Replacement(Add to one row a multiple of another row)
+def replaceRow(matrix, row1, row2, coefficient):
+    # for i in range(len(matrix[0])):
+    return
+
+
+#Scaling(Multiply all entries in a row by a nonzero constant)
+def  scaleRow(matrix, rowNum, constant):
+    if constant!=0:
+        for i in range(len(matrix[rowNum])):
+            matrix[rowNum][i] = constant*matrix[rowNum][i]
+    return
+
+#Interchange (change position two rows)
+def changeRow(matrix, row1, row2):
+    rowContainer = matrix[row1]
+    matrix[row1] = matrix[row2]
+    matrix[row2] = rowContainer
+    return
+
+
 def main():
     row, column = getRowAndColumnInfo()
     matrixList = []
@@ -67,9 +88,13 @@ def main():
     for i in range(row):
         matrixList[i].append(constantValues[i])
     print(matrixList)
+    scaleRow(matrixList, 0, 1)
+    print(matrixList)
+    scaleRow(matrixList, 0, 2)
+    print(matrixList)
+    scaleRow(matrixList, 0, 1/2)
+    print(matrixList)
+
+    # now the matrixList is the augmented matrix of the linear equation system
     
-    
-
-
-
 main()
