@@ -57,6 +57,8 @@ def changeRow(matrix, row1, row2):
 
 def findPivot(matrix):
     global pivotColumn, pivotRow
+    if pivotColumn>=len(matrix[0]):
+        return
     for i in range(pivotColumn, len(matrix[0])):
         for j in range(pivotRow, len(matrix)):
             if matrix[j][i]!=0 :
@@ -65,6 +67,17 @@ def findPivot(matrix):
                 return
 
 def forwardPhase(matrix):
+    #this function takes in the matrix, selects the next pivot and make the bellow entries zero
+    global pivotColumn, pivotRow
+    pivotColumnNow = pivotColumn
+    pivotRowNow = pivotRow
+    findPivot(matrix)
+    #now we have the new pivot column and pivot row settled 
+    if pivotColumn>=len(matrix[0])-1:
+        return
+    changeRow(matrix, pivotRowNow, pivotRow)
+    
+    
     
 
 def main():
@@ -107,7 +120,8 @@ def main():
     print(matrixList)
     # now the matrixList is the augmented matrix of the linear equation system
 
-    findPivot(matrixList)
+    forwardPhase(matrixList)
+    print(matrixList)
 
     print("pivot column={} pivot row ={}".format(pivotColumn, pivotRow))
 
