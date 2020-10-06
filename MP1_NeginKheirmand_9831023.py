@@ -30,6 +30,10 @@ def getRowAndColumnInfo():
     return listOfInput[0], listOfInput[1]
     
 
+    
+pivotColumn = 0
+pivotRow = 0
+
 #Replacement(Add to one row a multiple of another row)
 def replaceRow(matrix, row1, row2, coefficient):
     for i in range(len(matrix[0])):
@@ -51,6 +55,17 @@ def changeRow(matrix, row1, row2):
     matrix[row2] = rowContainer
     return
 
+def findPivot(matrix):
+    global pivotColumn, pivotRow
+    for i in range(pivotColumn, len(matrix[0])):
+        for j in range(pivotRow, len(matrix)):
+            if matrix[j][i]!=0 :
+                pivotColumn = i
+                pivotRow = j
+                return
+
+def forwardPhase(matrix):
+    
 
 def main():
     row, column = getRowAndColumnInfo()
@@ -88,7 +103,15 @@ def main():
 
     for i in range(row):
         matrixList[i].append(constantValues[i])
+    print("Given augmented matrix:")
     print(matrixList)
     # now the matrixList is the augmented matrix of the linear equation system
+
+    findPivot(matrixList)
+
+    print("pivot column={} pivot row ={}".format(pivotColumn, pivotRow))
+
+
     
+
 main()
