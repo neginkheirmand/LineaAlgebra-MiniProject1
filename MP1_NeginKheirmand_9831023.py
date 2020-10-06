@@ -32,9 +32,9 @@ def getRowAndColumnInfo():
 
 def isInEchelonForm(matrix):
     #all nonzero rows are above any rows of zeros
-    for i in range(0, len(matrix)):
+    for i in range(0, len(matrix[0])):
         rowStarted = False
-        for j in range(0, len(matrix[0])):
+        for j in range(0, len(matrix)):
             if rowStarted:
                 if matrix[i][j]!=0:
                     return False
@@ -86,12 +86,11 @@ def convertToZeroEntry(matrix, pivot_Row, pivot_Column, thisRow, thisColumn):
     replaceRow(matrix, thisRow, pivot_Row, coefThsEntr)    
 
 def forwardPhase(matrix, row, column):
+    print(matrix)
     #this function takes in the matrix, selects the next pivot and make the bellow entries zero
     global pivotColumn, pivotRow
     findPivot(matrix, row, column)
     #now we have the new pivot column and pivot row settled 
-    # if pivotColumn>=len(matrix[0])-1:
-    #     return
     changeRow(matrix, pivotRow, row)
     row +=1
     column = pivotColumn 
@@ -99,8 +98,10 @@ def forwardPhase(matrix, row, column):
         if matrix[i][column]!=0:
             #make it zero  
             convertToZeroEntry(matrix, row-1, column, i, column)
-    #convert leading entry ->1
-    scaleRow(matrix, row-1, 1/matrix[row-1][pivotColumn])
+    if pivotColumn>=len(matrix[0])-1 or row>=len(matrix):
+        return
+    forwardPhase(matrix, row, pivotColumn+1)
+    
 
     
     
@@ -149,12 +150,19 @@ def main():
     row = 0
     column = 0 
     forwardPhase(matrixList, row, column)
-    row +=1
-    column = pivotColumn +1
+    
+    #convert leading entry ->1
+    j=0
+    for i in range(0, len(matrixList[0])):
+        if i==len(matrixList[0])-1:
+            #end of row
+            break
+        if matrixList[j][i]!=0 and matrixList[j][i]!=1:
+            scaleRow(matrixList, j, 1/matrixList[j][i])
+            j+=1
     print(matrixList)
+            
 
-    print("leftmost column={} bottom row ={}".format(column, row))
-    print("pivot column={} pivot row ={}".format(pivotColumn, pivotRow))
 
 
     
