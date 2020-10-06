@@ -30,6 +30,21 @@ def getRowAndColumnInfo():
     return listOfInput[0], listOfInput[1]
     
 
+def isInEchelonForm(matrix):
+    #all nonzero rows are above any rows of zeros
+    for i in range(0, len(matrix)):
+        rowStarted = False
+        for j in range(0, len(matrix[0])):
+            if rowStarted:
+                if matrix[i][j]!=0:
+                    return False
+            else: 
+                if matrix[i][j]!=0:
+                    rowStarted = True
+
+    
+
+
     
 pivotColumn = 0
 pivotRow = 0
@@ -37,7 +52,7 @@ pivotRow = 0
 #Replacement(Add to one row a multiple of another row)
 def replaceRow(matrix, row1, row2, coefficient):
     for i in range(len(matrix[0])):
-        matrix[row1][i]=matrix[row1][i]+(coefficient*matrix[row2][i])
+        matrix[row1][i]=matrix[row2][i]+(coefficient*matrix[row1][i])
     return
 
 
@@ -55,27 +70,38 @@ def changeRow(matrix, row1, row2):
     matrix[row2] = rowContainer
     return
 
-def findPivot(matrix):
+def findPivot(matrix, row, column):
     global pivotColumn, pivotRow
-    if pivotColumn>=len(matrix[0]):
-        return
-    for i in range(pivotColumn, len(matrix[0])):
-        for j in range(pivotRow, len(matrix)):
+    # if pivotColumn>=len(matrix[0]):
+    #     return
+    for i in range(column, len(matrix[0])):
+        for j in range(row, len(matrix)):
             if matrix[j][i]!=0 :
                 pivotColumn = i
                 pivotRow = j
                 return
 
-def forwardPhase(matrix):
+def convertToZeroEntry(matrix, pivot_Row, pivot_Column, thisRow, thisColumn):
+    coefThsEntr = (-1*matrix[pivot_Row][pivotColumn])/matrix[thisRow][thisColumn]
+    replaceRow(matrix, thisRow, pivot_Row, coefThsEntr)    
+
+def forwardPhase(matrix, row, column):
     #this function takes in the matrix, selects the next pivot and make the bellow entries zero
     global pivotColumn, pivotRow
-    pivotColumnNow = pivotColumn
-    pivotRowNow = pivotRow
-    findPivot(matrix)
+    findPivot(matrix, row, column)
     #now we have the new pivot column and pivot row settled 
-    if pivotColumn>=len(matrix[0])-1:
-        return
-    changeRow(matrix, pivotRowNow, pivotRow)
+    # if pivotColumn>=len(matrix[0])-1:
+    #     return
+    changeRow(matrix, pivotRow, row)
+    row +=1
+    column = pivotColumn 
+    for i in range(row, len(matrix)):
+        if matrix[i][column]!=0:
+            #make it zero  
+            convertToZeroEntry(matrix, row-1, column, i, column)
+    #convert leading entry ->1
+    scaleRow(matrix, row-1, 1/matrix[row-1][pivotColumn])
+
     
     
     
@@ -120,9 +146,14 @@ def main():
     print(matrixList)
     # now the matrixList is the augmented matrix of the linear equation system
 
-    forwardPhase(matrixList)
+    row = 0
+    column = 0 
+    forwardPhase(matrixList, row, column)
+    row +=1
+    column = pivotColumn +1
     print(matrixList)
 
+    print("leftmost column={} bottom row ={}".format(column, row))
     print("pivot column={} pivot row ={}".format(pivotColumn, pivotRow))
 
 
