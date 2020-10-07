@@ -43,7 +43,6 @@ def isInEchelonForm(matrix):
                     rowStarted = True
 
     
-    
 pivotColumn = 0
 pivotRow = 0
 
