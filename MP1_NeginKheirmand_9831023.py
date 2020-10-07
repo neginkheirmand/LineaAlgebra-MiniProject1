@@ -136,12 +136,13 @@ def printMatrix(matrix):
     print(" ]")
     
 def upperEntriesToZero(matrix, pivot_Column, pivot_Row):
-    if pivotRow==0 :
+    if pivot_Row==0 :
         return
-    i = pivotRow-1
+    print("pivot row is", pivot_Row)
+    i = pivot_Row-1
     while i>=0:
-        if matrix[i][pivotColumn]!=0:
-            replaceThisRow(matrix, i, pivotRow, (-1*matrix[i][pivotColumn])/matrix[pivotRow][pivotColumn])
+        if matrix[i][pivot_Column]!=0:
+            replaceThisRow(matrix, i, pivot_Row, (-1*matrix[i][pivot_Column])/matrix[pivot_Row][pivot_Column])
 
         i-=1
     
