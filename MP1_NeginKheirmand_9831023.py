@@ -161,6 +161,6 @@ def main():
             scaleRow(matrixList, j, 1/matrixList[j][i])
             j+=1
     print(matrixList)
-
+ 
 
 main()
