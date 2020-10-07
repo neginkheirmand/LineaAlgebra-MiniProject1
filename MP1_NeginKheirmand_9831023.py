@@ -42,7 +42,6 @@ def isInEchelonForm(matrix):
                 if matrix[i][j]!=0:
                     rowStarted = True
 
-    
 pivotColumn = 0
 pivotRow = 0
 
