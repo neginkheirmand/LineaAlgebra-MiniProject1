@@ -138,7 +138,6 @@ def printMatrix(matrix):
 def upperEntriesToZero(matrix, pivot_Column, pivot_Row):
     if pivot_Row==0 :
         return
-    print("pivot row is", pivot_Row)
     i = pivot_Row-1
     while i>=0:
         if matrix[i][pivot_Column]!=0:
@@ -154,7 +153,7 @@ def backwardPhase(matrix):
         for i in range(0, len(matrix[0])):
             if matrix[j][i]!=0:
                 #leading entry
-                print("its a leading entry row={}  column={}".format(j, i))
+                # print("its a leading entry row={}  column={}".format(j, i))
                 upperEntriesToZero(matrix, i, j)
                 break
         j-=1
@@ -170,6 +169,44 @@ def leadingEntriesOne(matrix):
                 break
             j+=1
         i+=1
+
+
+def printVariable(vlist, numbVariable):
+    if vlist == None:
+        print("X{} is free".format(numbVariable+1), end="\n")
+        return
+    else:
+        print("X{}: {}".format(numbVariable+1, vlist[len(vlist)-1]), end=" ")
+        for i in range(0, len(vlist)-1):
+            if vlist[i]==0 or i == numbVariable:
+                continue
+            elif vlist[i]>0:
+                print("{}X{}".format(-1*vlist[i], i+1), end=" ")
+            else:
+                print("+{}X{}".format(-1*vlist[i], i+1), end=" ")
+        print()
+        return
+
+
+
+
+
+def printOutput(matrix):
+    variables = [-1]*(len(matrix[0])-1)
+    for i in range(0, len(matrix)):
+        for j in range(0, len (matrix[0])):
+            if matrix[i][j]!=0:
+                #leading entry
+                variables[j] = i
+                break
+    #where variables[i] is -1 the variable Xi is a free variable 
+    #if a variables[i] is not -1 (the number of the row in which they are the leading entry/pivot) then the variable Xi is a base variable
+    for i in range(0, len(matrix[0])-1):
+        if(variables[i]!=-1):
+            printVariable(matrix[variables[i]] ,i)
+        else:
+            printVariable(None, i)
+
 
 
 def main():
@@ -218,7 +255,8 @@ def main():
     forwardPhase(matrixList, row, column)
     
 
-    printMatrix(matrixList)
+    # printMatrix(matrixList)
+    print("\n\n\n")
     # zero rows 
     zeroRows(matrixList)
     #the matrix is in echelon form
@@ -227,10 +265,9 @@ def main():
     
     #convert leading entry ->1
     leadingEntriesOne(matrixList)
-
     printMatrix(matrixList)
 
-     
+    printOutput(matrixList)     
 
 
 
