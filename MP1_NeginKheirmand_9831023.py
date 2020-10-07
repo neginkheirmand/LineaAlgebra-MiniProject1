@@ -72,6 +72,23 @@ def changeRow(matrix, row1, row2):
     matrix[row2] = rowContainer
     return
 
+def zeroRows(matrix):
+    numZeroRows= 0
+    i=0
+    while i<len(matrix):
+        zeroEntries=0
+        for j in range(0, len(matrix[0])):
+            if matrix[i][j]==0:
+                zeroEntries+=1
+        if zeroEntries== len(matrix[0]):
+            matrix.pop(i)
+            numZeroRows+=1
+            i-=1
+        i+=1
+    for k in range(0, numZeroRows):
+        matrix.append([0] * len(matrix[0]))
+
+
 def findPivot(matrix, row, column):
     global pivotColumn, pivotRow
     # if pivotColumn>=len(matrix[0]):
@@ -136,6 +153,7 @@ def backwardPhase(matrix):
         for i in range(0, len(matrix[0])):
             if matrix[j][i]!=0:
                 #leading entry
+                print("its a leading entry row={}  column={}".format(j, i))
                 upperEntriesToZero(matrix, i, j)
                 break
         j-=1
@@ -188,18 +206,22 @@ def main():
     forwardPhase(matrixList, row, column)
     
     #convert leading entry ->1
-    j=0
-    for i in range(0, len(matrixList[0])):
-        if i==len(matrixList[0])-1:
-            #end of row
-            break
-        if matrixList[j][i]!=0 and matrixList[j][i]!=1:
-            scaleRow(matrixList, j, 1/matrixList[j][i])
-            j+=1
+    # j=0
+    # for i in range(0, len(matrixList[0])):
+    #     if i==len(matrixList[0])-1:
+    #         #end of row
+    #         break
+    #     if matrixList[j][i]!=0 and matrixList[j][i]!=1:
+    #         scaleRow(matrixList, j, 1/matrixList[j][i])
+    #         j+=1
+
     printMatrix(matrixList)
-    #the matrix is in echelon fowm
+    # zero rows 
+    zeroRows(matrixList)
+    #the matrix is in echelon form
     #next step -> change it to reduced echelon form
     backwardPhase(matrixList)
+    # # upperEntriesToZero(matrixList, 4, 2)
     printMatrix(matrixList)
 
      
