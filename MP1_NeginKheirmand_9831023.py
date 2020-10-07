@@ -45,10 +45,16 @@ def isInEchelonForm(matrix):
 pivotColumn = 0
 pivotRow = 0
 
-#Replacement(Add to one row a multiple of another row)
+#Replacement(Add to one row a multiple of its own and other row)
 def replaceRow(matrix, row1, row2, coefficient):
     for i in range(len(matrix[0])):
         matrix[row1][i]=matrix[row2][i]+(coefficient*matrix[row1][i])
+    return
+
+#Replacement(Add to one row a multiple of another row)
+def replaceThisRow(matrix, row1, row2, coefficient):
+    for i in range(len(matrix[0])):
+        matrix[row1][i]=matrix[row1][i]+(coefficient*matrix[row2][i])
     return
 
 
@@ -82,7 +88,6 @@ def convertToZeroEntry(matrix, pivot_Row, pivot_Column, thisRow, thisColumn):
     replaceRow(matrix, thisRow, pivot_Row, coefThsEntr)    
 
 def forwardPhase(matrix, row, column):
-    print(matrix)
     #this function takes in the matrix, selects the next pivot and make the bellow entries zero
     global pivotColumn, pivotRow
     findPivot(matrix, row, column)
@@ -98,10 +103,44 @@ def forwardPhase(matrix, row, column):
         return
     forwardPhase(matrix, row, pivotColumn+1)
     
+def printMatrix(matrix):
+    print("[", end=" ")
+    for i in range(0, len(matrix)):
+        if i==0:
+            print("[", end=" ")
+        else:    
+            print("  [", end=" ")
+        for j in range(0, len(matrix[0])):
+            print(matrix[i][j], end=" ")
+        if i==len(matrix)-1:
+            print("]", end="")
+        else:
+            print("]")
+    print(" ]")
+    
+def upperEntriesToZero(matrix, pivot_Column, pivot_Row):
+    if pivotRow==0 :
+        return
+    i = pivotRow-1
+    while i>=0:
+        if matrix[i][pivotColumn]!=0:
+            replaceThisRow(matrix, i, pivotRow, (-1*matrix[i][pivotColumn])/matrix[pivotRow][pivotColumn])
 
+        i-=1
     
-    
-    
+
+def backwardPhase(matrix):
+    i = len(matrix[0]) -2 #leftmost column
+    j = len(matrix) -1 #downmost row
+    while j>=0:
+        for i in range(0, len(matrix[0])):
+            if matrix[j][i]!=0:
+                #leading entry
+                upperEntriesToZero(matrix, i, j)
+                break
+        j-=1
+    return
+
 
 def main():
     row, column = getRowAndColumnInfo()
@@ -140,7 +179,8 @@ def main():
     for i in range(row):
         matrixList[i].append(constantValues[i])
     print("Given augmented matrix:")
-    print(matrixList)
+    # print(matrixList)
+    printMatrix(matrixList)
     # now the matrixList is the augmented matrix of the linear equation system
 
     row = 0
@@ -156,7 +196,13 @@ def main():
         if matrixList[j][i]!=0 and matrixList[j][i]!=1:
             scaleRow(matrixList, j, 1/matrixList[j][i])
             j+=1
-    print(matrixList)
+    printMatrix(matrixList)
+    #the matrix is in echelon fowm
+    #next step -> change it to reduced echelon form
+    backwardPhase(matrixList)
+    printMatrix(matrixList)
+
+     
 
 
 
