@@ -160,6 +160,17 @@ def backwardPhase(matrix):
         j-=1
     return
 
+def leadingEntriesOne(matrix):
+    i=0
+    j=0
+    while i<len(matrix):
+        while j<len(matrix[0]):
+            if matrix[i][j]!=0:
+                scaleRow(matrix, i, 1/matrix[i][j])
+                break
+            j+=1
+        i+=1
+
 
 def main():
     row, column = getRowAndColumnInfo()
@@ -206,15 +217,6 @@ def main():
     column = 0 
     forwardPhase(matrixList, row, column)
     
-    #convert leading entry ->1
-    # j=0
-    # for i in range(0, len(matrixList[0])):
-    #     if i==len(matrixList[0])-1:
-    #         #end of row
-    #         break
-    #     if matrixList[j][i]!=0 and matrixList[j][i]!=1:
-    #         scaleRow(matrixList, j, 1/matrixList[j][i])
-    #         j+=1
 
     printMatrix(matrixList)
     # zero rows 
@@ -222,7 +224,10 @@ def main():
     #the matrix is in echelon form
     #next step -> change it to reduced echelon form
     backwardPhase(matrixList)
-    # # upperEntriesToZero(matrixList, 4, 2)
+    
+    #convert leading entry ->1
+    leadingEntriesOne(matrixList)
+
     printMatrix(matrixList)
 
      
