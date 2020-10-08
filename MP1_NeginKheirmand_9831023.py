@@ -176,14 +176,24 @@ def printVariable(vlist, numbVariable):
         print("X{} is free".format(numbVariable+1), end="\n")
         return
     else:
-        print("X{}: {}".format(numbVariable+1, vlist[len(vlist)-1]), end=" ")
+        noSign = False
+        if vlist[len(vlist)-1]!=0:
+            noSign = False
+            print("X{}: {}".format(numbVariable+1, vlist[len(vlist)-1]), end=" ")
+        else:
+            noSign = True
+            print("X{}:".format(numbVariable+1), end=" ")
+        
         for i in range(0, len(vlist)-1):
             if vlist[i]==0 or i == numbVariable:
                 continue
             elif vlist[i]>0:
-                print("{}X{}".format(-1*vlist[i], i+1), end=" ")
+                print("{}\033[91mX{}\033[0m".format(-1*vlist[i], i+1), end=" ")
+            elif noSign:
+                print("{}\033[91mX{}\033[0m".format(-1*vlist[i], i+1), end=" ")
+                noSign = False
             else:
-                print("+{}X{}".format(-1*vlist[i], i+1), end=" ")
+                print("+{}\033[91mX{}\033[0m".format(-1*vlist[i], i+1), end=" ")
         print()
         return
 
@@ -207,7 +217,30 @@ def printOutput(matrix):
         else:
             printVariable(None, i)
 
+def consistency(matrix):
+    print("\n\n\n")
+    printMatrix(matrix)
+    print("\n\n\n")
 
+    i = len(matrix) -1
+    while i>=0:
+        j = len(matrix[0]) -1
+        if matrix[i][j] == 0:
+            i-=1
+            continue
+        numVariableInRow = 0
+        j-=1
+        while j>=0:
+            if matrix[i][j]!=0:
+                numVariableInRow+=1
+                break
+            j-=1
+        if numVariableInRow==0:
+            return False
+        i-=1
+    return True
+
+def 
 
 def main():
     row, column = getRowAndColumnInfo()
@@ -253,16 +286,17 @@ def main():
     row = 0
     column = 0 
     forwardPhase(matrixList, row, column)
-    
 
     # printMatrix(matrixList)
     print("\n\n\n")
     # zero rows 
     zeroRows(matrixList)
     #the matrix is in echelon form
+    if not(consistency(matrixList)):
+        print("this system is inconsistent")
+        return
     #next step -> change it to reduced echelon form
     backwardPhase(matrixList)
-    
     #convert leading entry ->1
     leadingEntriesOne(matrixList)
     printMatrix(matrixList)
