@@ -218,9 +218,6 @@ def printOutput(matrix):
             printVariable(None, i)
 
 def consistency(matrix):
-    print("\n\n\n")
-    printMatrix(matrix)
-    print("\n\n\n")
 
     i = len(matrix) -1
     while i>=0:
@@ -240,10 +237,17 @@ def consistency(matrix):
         i-=1
     return True
 
-def 
+def roundoffErrorFixer(matrix):
+    for i in range(0,len(matrix)):
+        for j in range(0, len(matrix[0])):
+            if -0.00000001<matrix[i][j]<0.00000001:
+                matrix[i][j]=0
 
 def main():
     row, column = getRowAndColumnInfo()
+    if row == 0 or column==0:
+        print("\033[91mXinexistent matrix\033[0m")
+        return
     matrixList = []
     for i in range(row):
         print("Enter row {}".format(i))
@@ -286,21 +290,20 @@ def main():
     row = 0
     column = 0 
     forwardPhase(matrixList, row, column)
-
+    roundoffErrorFixer(matrixList)
     # printMatrix(matrixList)
     print("\n\n\n")
     # zero rows 
     zeroRows(matrixList)
     #the matrix is in echelon form
     if not(consistency(matrixList)):
-        print("this system is inconsistent")
+        print("\033[91mthis system is inconsistent\033[0m")
         return
     #next step -> change it to reduced echelon form
     backwardPhase(matrixList)
     #convert leading entry ->1
     leadingEntriesOne(matrixList)
     printMatrix(matrixList)
-
     printOutput(matrixList)     
 
 
